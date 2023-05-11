@@ -1,8 +1,8 @@
+// Instantiation sequelize and allowing the dotenv package to run
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-// Allows it to connect to the .env file in the root, pulling info from there.
-// This allows you to store passwords separately, and not hardcoded where others can read it freely.
+// Allows you to run secure info remotely, and not hardcoded in a public space
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -14,4 +14,5 @@ const sequelize = new Sequelize(
   }
 );
 
+// Allows this config to be imported elsewhere
 module.exports = sequelize;
