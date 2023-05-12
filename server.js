@@ -1,12 +1,7 @@
 // Required packages/modules needed to run application
 const express = require('express');
-// const db = require('./config/connection'); MAY NOT NEED HERE
+const db = require('./config/connection');
 const inquirer = require('inquirer');
-// const initializeDatabase = require('./lib/initDatabase'); MAY NOT NEED AGAIN
-const promptReroute = require('./lib/promptReroute');
-
-// Setting up possible path to model so I dont forget to use this if I find I need it
-// const modelIfNeeded = require('./models/modelIfNeeded');
 
 // Instantiating express and setting up basic port config
 const app = express();
@@ -59,13 +54,71 @@ const mainMenu = [
 ];
 
 // Captures the response from the prompted question
-function init() {
+const menu = () => {
     inquirer.prompt(mainMenu)
     .then(response => {
         // initializeDatabase(); MAY NEED LATER, NOT SURE YET
         return promptReroute(response);
-    });    
+    }); 
+    
 };
+menu();
 
-// Initializes the prompts, then uses the response to send related data to user
-init()
+// Takes the user response, dispenses the appropriate results, then re-prompts user.
+const promptReroute = (response) => {
+    if (response.mainPrompt === "View All Departments") {
+        db.query(`SELECT * FROM department`, function (err, results) {
+            console.table(results);
+            menu();
+        });
+    }
+    else if (response.mainPrompt === "View All Roles") {
+        db.query(`SELECT * FROM role`, function (err, results) {
+            console.table(results);
+        });
+    }
+    else if (response.mainPrompt === "View All Employees") {
+        db.query(`SELECT * FROM employee`, function (err, results) {
+            console.table(results);
+        });
+    }
+    else if (response.mainPrompt === "Add A Department") {
+
+    }
+    else if (response.mainPrompt === "Add A Role") {
+
+    }
+    else if (response.mainPrompt === "Add An Employee") {
+
+    }
+    else if (response.mainPrompt === "Update An Employee Role") {
+
+    }
+    else if (response.mainPrompt === "Update Employee Managers") {
+
+    }
+    else if (response.mainPrompt === "View Employees (By Manager)") {
+
+    }
+    else if (response.mainPrompt === "View Employees (By Department)") {
+
+    }
+    else if (response.mainPrompt === "Delete Departments") {
+
+    }
+    else if (response.mainPrompt === "Delete Roles") {
+
+    }
+    else if (response.mainPrompt === "Delete Employees") {
+
+    }
+    else if (response.mainPrompt === "View Total Budget") {
+
+    }
+    else if (response.mainPrompt === "View Budget (By Department)") {
+
+    }
+    else {
+        console.log(err);
+    }
+};
