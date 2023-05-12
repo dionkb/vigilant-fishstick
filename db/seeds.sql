@@ -21,8 +21,3 @@ VALUES ("D", "B", 1, NULL),
        ("M", "L", 3, NULL),
        ("D", "K", 4, NULL),
        ("A", "J", 4, NULL);
-
--- Using this for quick testing/debugging purposes
-SELECT * FROM department;
-SELECT * FROM role;
-SELECT * FROM employee;
