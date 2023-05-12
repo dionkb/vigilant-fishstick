@@ -2,6 +2,7 @@
 const express = require('express');
 const sequelize = require('./config/connection');
 const inquirer = require('inquirer');
+const initializeDatabase = require('./lib/initDatabase');
 const promptReroute = require('./lib/promptReroute');
 
 // Setting up possible path to model so I dont forget to use this if I find I need it
@@ -57,16 +58,26 @@ const mainMenu = [
     },
 ];
 
+// FIXME:
 // Captures the response from the prompted question
 function init() {
-    return inquirer.prompt(mainMenu);
+    // initializeDatabase();
+    inquirer.prompt(mainMenu)
+    .then(response => {
+        console.log("You selected: " + response.mainPrompt);
+        initializeDatabase();
+        return promptReroute(response);
+    });    
 };
 
 // Initializes the prompts, then uses the response to send related data to user
 init()
-.then(response => {
-    return promptReroute(response);
-})
-.then(rerouted => {
-    console.log("SUCCESS: " + rerouted);
-});
+
+
+// Used to test to make sure sequelize connection is running properly
+// try {
+//     sequelize.authenticate();
+//     console.log('Connection has been established successfully.');
+//   } catch (error) {
+//     console.error('Unable to connect to the database:', error);
+//   }
