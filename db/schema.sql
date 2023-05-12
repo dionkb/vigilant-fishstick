@@ -15,7 +15,7 @@ CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(15, 2) NOT NULL,
-    department_id INT NOT NULL,
+    department_id INT,
     FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE employee (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    role_id INT NOT NULL,
+    role_id INT,
     -- Don't forget, the following will link to the manager of this employee, can be null if they have no manager
     manager_id INT,
     FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL,
@@ -31,4 +31,4 @@ CREATE TABLE employee (
 );
 
 -- Using this for quick testing/debugging purposes
-SELECT * FROM department;
+SHOW TABLES;
