@@ -1,18 +1,18 @@
-// Instantiation sequelize and allowing the dotenv package to run
-const Sequelize = require('sequelize');
-require('dotenv').config();
+// Import mysql2 and allow dotenv package to run config with .env credentials
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Allows you to run secure info remotely, and not hardcoded in a public space
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+const db = mysql.createConnection(
   {
-    host: 'localhost',
-    dialect: 'mysql',
-    port: 3306
-  }
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  },
+  console.log(`Connected to the test database.`)
 );
 
 // Allows this config to be imported elsewhere
-module.exports = sequelize;
+module.exports = db;

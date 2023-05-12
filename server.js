@@ -1,8 +1,8 @@
 // Required packages/modules needed to run application
 const express = require('express');
-const sequelize = require('./config/connection');
+// const db = require('./config/connection'); MAY NOT NEED HERE
 const inquirer = require('inquirer');
-const initializeDatabase = require('./lib/initDatabase');
+// const initializeDatabase = require('./lib/initDatabase'); MAY NOT NEED AGAIN
 const promptReroute = require('./lib/promptReroute');
 
 // Setting up possible path to model so I dont forget to use this if I find I need it
@@ -16,9 +16,9 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Allows seqelize to connect to the db before starting the server to ensure it loads
-sequelize.sync().then(() => {
-    app.listen(PORT, () => console.log('Now listening'));
+// Allows connection to the db using credentials from .env
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
 // Once connected to the database, uses inquirer to prompt user input
@@ -58,26 +58,14 @@ const mainMenu = [
     },
 ];
 
-// FIXME:
 // Captures the response from the prompted question
 function init() {
-    // initializeDatabase();
     inquirer.prompt(mainMenu)
     .then(response => {
-        console.log("You selected: " + response.mainPrompt);
-        initializeDatabase();
+        // initializeDatabase(); MAY NEED LATER, NOT SURE YET
         return promptReroute(response);
     });    
 };
 
 // Initializes the prompts, then uses the response to send related data to user
 init()
-
-
-// Used to test to make sure sequelize connection is running properly
-// try {
-//     sequelize.authenticate();
-//     console.log('Connection has been established successfully.');
-//   } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-//   }
