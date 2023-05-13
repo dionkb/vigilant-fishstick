@@ -2,6 +2,7 @@
 const express = require('express');
 const db = require('./config/connection');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 // Instantiating express and setting up basic port config
 const app = express();
@@ -18,7 +19,6 @@ app.listen(PORT, () => {
 
 // Once connected to the database, uses inquirer to prompt user input
 const mainMenu = [
-    // Obtaining the project title
     {
         name: "mainPrompt",
         message: "What are we doing today?",
@@ -42,83 +42,72 @@ const mainMenu = [
             "View Total Budget",
             "View Budget (By Department)"
         ],
-        validate: userInput => {
-            if (userInput) {
-                return true;
-            } else {
-                console.log('You must select an option');
-                return false;
-            }
-        }
     },
 ];
 
-// Captures the response from the prompted question
+// Takes the user response, dispenses the appropriate results, then re-prompts user.
 const menu = () => {
     inquirer.prompt(mainMenu)
-    .then(response => {
-        // initializeDatabase(); MAY NEED LATER, NOT SURE YET
-        return promptReroute(response);
+    .then(userInput => {
+        let response = userInput.mainPrompt;
+        switch(response) {
+            // Each case (self-explanatory titles) provides the relevant information
+            case "View All Departments":
+                db.query(`SELECT * FROM department`, function (err, results) {
+                    console.table(results);
+                    menu();  
+                });
+                break;
+            case "View All Roles":
+                db.query(`SELECT * FROM role`, function (err, results) {
+                    console.table(results);
+                    menu();
+                });
+                break;
+            case "View All Employees":
+                db.query(`SELECT * FROM employee`, function (err, results) {
+                    console.table(results);
+                    menu();
+                });
+                break;
+            case "Add A Department":
+
+                break;
+            case "Add A Role":
+
+                break;
+            case "Add An Employee":
+
+                break;
+            case "Update An Employee Role":
+
+                break;
+            case "Update Employee Managers":
+
+                break;
+            case "View Employees (By Manager)":
+
+                break;
+            case "View Employees (By Department)":
+
+                break;
+            case "Delete Departments":
+
+                break;
+            case "Delete Roles":
+
+                break;
+            case "Delete Employees":
+
+                break;
+            case "View Total Budget":
+
+                break;
+            case "View Budget (By Department)":
+
+                break;
+        }
     }); 
     
 };
 menu();
-
-// Takes the user response, dispenses the appropriate results, then re-prompts user.
-const promptReroute = (response) => {
-    if (response.mainPrompt === "View All Departments") {
-        db.query(`SELECT * FROM department`, function (err, results) {
-            console.table(results);
-            menu();
-        });
-    }
-    else if (response.mainPrompt === "View All Roles") {
-        db.query(`SELECT * FROM role`, function (err, results) {
-            console.table(results);
-        });
-    }
-    else if (response.mainPrompt === "View All Employees") {
-        db.query(`SELECT * FROM employee`, function (err, results) {
-            console.table(results);
-        });
-    }
-    else if (response.mainPrompt === "Add A Department") {
-
-    }
-    else if (response.mainPrompt === "Add A Role") {
-
-    }
-    else if (response.mainPrompt === "Add An Employee") {
-
-    }
-    else if (response.mainPrompt === "Update An Employee Role") {
-
-    }
-    else if (response.mainPrompt === "Update Employee Managers") {
-
-    }
-    else if (response.mainPrompt === "View Employees (By Manager)") {
-
-    }
-    else if (response.mainPrompt === "View Employees (By Department)") {
-
-    }
-    else if (response.mainPrompt === "Delete Departments") {
-
-    }
-    else if (response.mainPrompt === "Delete Roles") {
-
-    }
-    else if (response.mainPrompt === "Delete Employees") {
-
-    }
-    else if (response.mainPrompt === "View Total Budget") {
-
-    }
-    else if (response.mainPrompt === "View Budget (By Department)") {
-
-    }
-    else {
-        console.log(err);
-    }
-};
