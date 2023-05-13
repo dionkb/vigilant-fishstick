@@ -11,7 +11,7 @@ const db = mysql.createConnection(
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
   },
-  console.log(`Connected to the test database.`)
+  console.log(`Connected to the ` + process.env.DB_NAME + ` database.`)
 );
 
 // Allows this config to be imported elsewhere
