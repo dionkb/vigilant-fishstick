@@ -23,9 +23,7 @@ const mainMenu = [
         name: "mainPrompt",
         message: "What are we doing today?",
         type: "list",
-        default: "none",
         choices: [
-            "none",
             "View All Departments",
             "View All Roles",
             "View All Employees",
@@ -40,7 +38,8 @@ const mainMenu = [
             "Delete Roles",
             "Delete Employees",
             "View Total Budget",
-            "View Budget (By Department)"
+            "View Budget (By Department)",
+            "Quit"
         ],
     },
 ];
@@ -71,13 +70,75 @@ const menu = () => {
                 });
                 break;
             case "Add A Department":
-
+                inquirer.prompt([
+                    {
+                        name: "deptName",
+                        message: "Enter the name of the department you would like to add:",
+                        type: "input",
+                    }
+                ])
+                .then(answer => {
+                    db.query(`INSERT INTO department (name) VALUES ("${answer.deptName}")`, function (err, results) {
+                        console.log("Successfully added " + answer.deptName + " department")
+                    })
+                    menu();
+                });
                 break;
             case "Add A Role":
-
+                inquirer.prompt([
+                    {
+                        name: "roleTitle",
+                        message: "Enter the title of the role you would like to add:",
+                        type: "input",
+                    },
+                    {
+                        name: "roleSalary",
+                        message: "Enter the salary of the role you are adding (Example: 50000):",
+                        type: "input",
+                    },
+                    {
+                        name: "roleDeptID",
+                        message: "Enter the department id# that this role will be associated with (Example: 7):",
+                        type: "input",
+                    }
+                ])
+                .then(answer => {
+                    db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${answer.roleTitle}", ${answer.roleSalary}, ${answer.roleDeptID})`, function (err, results) {
+                        console.log("Successfully added " + answer.roleTitle + " role")
+                    })
+                    menu();
+                });
                 break;
             case "Add An Employee":
-
+                inquirer.prompt([
+                    {
+                        name: "firstName",
+                        message: "Enter the employee's first name:",
+                        type: "input",
+                    },
+                    {
+                        name: "lastName",
+                        message: "Enter the employee's last name:",
+                        type: "input",
+                    },
+                    {
+                        name: "roleID",
+                        message: "Enter the role id# that this employee will be associated with (Example: 2):",
+                        type: "input",
+                    },
+                    {
+                        name: "mngrID",
+                        message: "Enter the id# for the manager that this employee will work under (Example: 1):",
+                        type: "input",
+                        default: "null",
+                    }
+                ])
+                .then(answer => {
+                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answer.firstName}", "${answer.lastName}", ${answer.roleID}, ${answer.mngrID})`, function (err, results) {
+                        console.log("Successfully added " + answer.firstName + " " + answer.lastName + " as a new employee")
+                    })
+                    menu();
+                });
                 break;
             case "Update An Employee Role":
 
@@ -105,6 +166,10 @@ const menu = () => {
                 break;
             case "View Budget (By Department)":
 
+                break;
+            case "Quit":
+                console.log("Goodbye!");
+                db.end();
                 break;
         }
     }); 
