@@ -117,7 +117,7 @@ menu();
 // --------------------------------------------------------------------------//
 
 function viewDepartments() {
-    db.query(`SELECT * FROM department`, function (err, results) {
+    db.query(`SELECT id, name FROM department ORDER BY name ASC;`, function (err, results) {
         if (err) throw (err);
         console.table(results);
         menu();  
@@ -125,15 +125,16 @@ function viewDepartments() {
 };
 
 function viewRoles() {
-    db.query(`SELECT * FROM role`, function (err, results) {
+    db.query(`SELECT role.id, role.title, role.salary, department.name AS department FROM role JOIN department ON role.department_id = department.id ORDER BY department;`, function (err, results) {
         if (err) throw (err);
         console.table(results);
         menu();
     });
 };
 
+
 function viewEmployees() {
-    db.query(`SELECT * FROM employee`, function (err, results) {
+    db.query(`SELECT E.id, E.first_name, E.last_name, CONCAT(M.first_name, ' ', M.last_name) AS manager, R.title, R.salary FROM employee E LEFT JOIN employee M ON E.manager_id = M.id LEFT JOIN role R ON E.role_id = R.id ORDER BY last_name;`, function (err, results) {
         if (err) throw (err);
         console.table(results);
         menu();
@@ -169,6 +170,7 @@ function addRole() {
             message: "Enter the salary of the role you are adding (Example: 50000):",
             type: "input",
         },
+        //FIXME: find a way to list off the departments instead of making user blind guess the dept.#
         {
             name: "roleDeptID",
             message: "Enter the department id# that this role will be associated with (Example: 7):",
@@ -196,6 +198,7 @@ function addEmployee() {
             message: "Enter the employee's last name:",
             type: "input",
         },
+        //FIXME: find a way to list off the role/managers instead of choosing number blind
         {
             name: "roleID",
             message: "Enter the role id# that this employee will be associated with (Example: 2):",
@@ -228,6 +231,7 @@ function updateEmpRole() {
                     type: "list",
                     choices: results,
                 },
+                //FIXME: find a way to list instead of blind number
                 {
                     name: "updatedRole",
                     message: "What is this employees new role?",
@@ -257,6 +261,7 @@ function updateEmpMngr() {
                     type: "list",
                     choices: results,
                 },
+                //FIXME: find a way to list instead of blind number
                 {
                     name: "updatedMngr",
                     message: "Who is this employees new manager?",
