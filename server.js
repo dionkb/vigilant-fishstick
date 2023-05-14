@@ -76,27 +76,31 @@ const menu = () => {
             case "Update Employee Managers":
                 updateEmpMngr();
                 break;
-            case "View Employees (By Manager)":
 
-                break;
-            case "View Employees (By Department)":
+                // OPTIONAL BONUS POINTS!
+            // case "View Employees (By Manager)":
 
-                break;
-            case "Delete Departments":
+            //     break;
+            // case "View Employees (By Department)":
 
-                break;
-            case "Delete Roles":
+            //     break;
+            // case "Delete Departments":
 
-                break;
-            case "Delete Employees":
+            //     break;
+            // case "Delete Roles":
 
-                break;
-            case "View Total Budget":
+            //     break;
+            // case "Delete Employees":
 
-                break;
-            case "View Budget (By Department)":
+            //     break;
+            // case "View Total Budget":
 
-                break;
+            //     break;
+            // case "View Budget (By Department)":
+
+            //     break;
+
+
             case "Quit":
                 console.log("Goodbye!");
                 db.end();
@@ -106,6 +110,11 @@ const menu = () => {
     
 };
 menu();
+
+
+// --------------------------------------------------------------------------//
+//   BELOW ARE THE FUNCTIONS THAT ALLOW THE SWITCH CASES TO ROUTE THE USER   //
+// --------------------------------------------------------------------------//
 
 function viewDepartments() {
     db.query(`SELECT * FROM department`, function (err, results) {
@@ -226,12 +235,9 @@ function updateEmpRole() {
                 }
             ])
             .then(answers => {
-                console.log(answers);
-                console.log(answers.updatedRole.name);
-                console.log(answers.selectEmployee);
                 db.query(`UPDATE employee SET role_id = '${answers.updatedRole}' WHERE id = '${answers.selectEmployee}'`, function (err) {
                     if (err) throw (err);
-                    console.log("Add this!");
+                    console.log("Successfully updated " + answers.selectEmployee + "'s role to " + answers.updatedRole);
                 })
                 menu();
             });
@@ -241,5 +247,30 @@ function updateEmpRole() {
 };
 
 function updateEmpMngr() {
-
+    const getEmpList = () => {
+        db.query(`SELECT id AS value, first_name AS name FROM employee;`, function (err, results) {
+            if (err) throw (err);
+            inquirer.prompt([
+                {
+                    name: "selectEmployee",
+                    message: "Which employee's manager are you updating?",
+                    type: "list",
+                    choices: results,
+                },
+                {
+                    name: "updatedMngr",
+                    message: "Who is this employees new manager?",
+                    type: "input",
+                }
+            ])
+            .then(answers => {
+                db.query(`UPDATE employee SET manager_id = '${answers.updatedMngr}' WHERE id = '${answers.selectEmployee}'`, function (err) {
+                    if (err) throw (err);
+                    console.log("Successfully updated " + answers.selectEmployee + "'s manager to " + answers.updatedMngr);
+                })
+                menu();
+            });
+        });
+    }
+    getEmpList();
 };
