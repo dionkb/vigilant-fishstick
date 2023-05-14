@@ -36,9 +36,9 @@ const mainMenu = [
             "Update Employee Manager",
             // "View Employees (By Manager)",
             // "View Employees (By Department)",
-            // "Delete Departments",
-            // "Delete Roles",
-            // "Delete Employees",
+            "Delete Departments",
+            "Delete Roles",
+            "Delete Employees",
             // "View Total Budget",
             // "View Budget (By Department)",
 
@@ -87,15 +87,15 @@ const menu = () => {
             // case "View Employees (By Department)":
             //     viewEmpByDpt();
             //     break;
-            // case "Delete Departments":
-            //     deleteDepartment();
-            //     break;
-            // case "Delete Roles":
-            //     deleteRole();
-            //     break;
-            // case "Delete Employees":
-            //     deleteEmployee();
-            //     break;
+            case "Delete Departments":
+                deleteDepartment();
+                break;
+            case "Delete Roles":
+                deleteRole();
+                break;
+            case "Delete Employees":
+                deleteEmployee();
+                break;
             // case "View Total Budget":
             //     viewTotalBudget();
             //     break;
@@ -335,17 +335,49 @@ function updateEmpMngr() {
     getEmpList2();
 };
 
+// FIXME: 
 // function viewEmpByMngr() {
-// 
+//     db.query(`SELECT E.id, CONCAT(E.first_name, " ", E.last_name) AS name, R.title AS "job title", R.salary, D.name AS department FROM employee E LEFT JOIN employee M ON E.manager_id = M.id LEFT JOIN role R ON E.role_id = R.id LEFT JOIN department D ON R.department_id = D.id GROUP BY M.first_name, M.last_name ORDER BY M.last_name;`, function (err, results) {
+//         if (err) throw (err);
+//         console.table(results);
+//         menu();
+//     });
 // };
 
+// FIXME:
 // function viewEmpByDpt() {
-// 
+//     db.query(`SELECT E.id, CONCAT(E.first_name, " ", E.last_name) AS name, R.title AS "job title", R.salary, D.name AS department FROM employee E LEFT JOIN employee M ON E.manager_id = M.id LEFT JOIN role R ON E.role_id = R.id LEFT JOIN department D ON R.department_id = D.id GROUP BY department;`, function (err, results) {
+//         if (err) throw (err);
+//         console.table(results);
+//         menu();
+//     });
 // };
 
-// function deleteDepartment() {
-// 
-// };
+// TODO: add cascading delete? Otherwise functional
+function deleteDepartment() {
+    const getDeptList2 = () => {
+        db.query(`SELECT id AS value, name FROM department;`, function (err, results) {
+            if (err) throw (err);
+            inquirer.prompt([
+                {
+                    name: "deleteDept",
+                    message: "Which department are you removing?",
+                    type: "list",
+                    choices: results,
+                },
+            ])
+            .then(answer => {
+                console.log(answer);
+                db.query(`DELETE FROM department WHERE id = "${answer.deleteDept}" `, function (err) {
+                    if (err) throw (err);
+                    console.log("Successfully removed department");
+                });
+                menu(); 
+            });
+        });
+    };
+    getDeptList2();
+};
 
 // function deleteRole() {
 // 
