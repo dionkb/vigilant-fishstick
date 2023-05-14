@@ -8,7 +8,7 @@
   After following the installation/execution instructions, the user can then run this command line application. It will allow the user to view and edit the employees, roles, and departments of a mock database. This project was built using SQL in order to showcase the skills learned this week. The user can follow a variety of easy to understand prompts which will allow them to easily track and manage the database in a quick and clear way.
 
   Screenshot of final output:  
-  ![screenshot or gif](./.\assets\screenshot.jpg)
+  ![screenshot or gif](assets/screenshot.jpg)
 
   ## Table of Contents
   * [Dependencies](#dependencies)
