@@ -34,7 +34,8 @@
   ## Usage
 
   ### Executing Program
-  In the integrated terminal, simply type 'npm start' to begin. Now, just follow the clear choices to begin playing around with the different comman options.
+  In the integrated terminal, simply type 'npm start' to begin. Now, just follow the clear choices to begin playing around with the different options.  
+  Link to a walkthrough video on basic operation: https://drive.google.com/file/d/1nPSK5krrNw9leiz4N01CHfGodxzsu8rr/view
   
   Link to the deployed application:  
   N/A
