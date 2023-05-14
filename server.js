@@ -33,7 +33,7 @@ const mainMenu = [
             "Update An Employee Role",
 
             // THE FOLLWOING WILL BE IMPLEMENTED IN FUTURE UPDATES
-            // "Update Employee Managers",
+            "Update Employee Manager",
             // "View Employees (By Manager)",
             // "View Employees (By Department)",
             // "Delete Departments",
@@ -78,9 +78,9 @@ const menu = () => {
                 break;
 
             // OPTIONAL BONUS POINTS FOR FUTURE UPDATES!
-            // case "Update Employee Managers":
-            //     updateEmpMngr();
-            //     break;
+            case "Update Employee Manager":
+                updateEmpMngr();
+                break;
             // case "View Employees (By Manager)":
             //     viewEmpByMngr();
             //     break;
@@ -261,7 +261,7 @@ function updateEmpRole() {
             ])
             .then(answer => {
                 let answerBank = answer;
-                const getRoleList = () => {  
+                const getRoleList2 = () => {  
                     db.query(`SELECT id AS value, title AS name FROM role;`, function (err, results) {
                         if (err) throw (err);
                         inquirer.prompt([              
@@ -281,7 +281,7 @@ function updateEmpRole() {
                         });
                     });
                 };
-                getRoleList();
+                getRoleList2();
             });
         });
     };
@@ -292,35 +292,48 @@ function updateEmpRole() {
 //   BELOW ARE THE BONUS FUNCTIONS THAT ALLOW THE SWITCH CASES TO ROUTE THE USER   //
 // --------------------------------------------------------------------------------//
 
-// function updateEmpMngr() {
-//     const getEmpList = () => {
-//         db.query(`SELECT id AS value, first_name AS name FROM employee;`, function (err, results) {
-//             if (err) throw (err);
-//             inquirer.prompt([
-//                 {
-//                     name: "selectEmployee",
-//                     message: "Which employee's manager are you updating?",
-//                     type: "list",
-//                     choices: results,
-//                 },
-//                 //FIXME: find a way to list instead of blind number
-//                 {
-//                     name: "updatedMngr",
-//                     message: "Who is this employees new manager?",
-//                     type: "input",
-//                 }
-//             ])
-//             .then(answers => {
-//                 db.query(`UPDATE employee SET manager_id = '${answers.updatedMngr}' WHERE id = '${answers.selectEmployee}'`, function (err) {
-//                     if (err) throw (err);
-//                     console.log("Successfully updated " + answers.selectEmployee + "'s manager to " + answers.updatedMngr);
-//                 })
-//                 menu();
-//             });
-//         });
-//     }
-//     getEmpList();
-// };
+function updateEmpMngr() {
+    const getEmpList2 = () => {
+        db.query(`SELECT id AS value, CONCAT(first_name, " ", last_name) AS name FROM employee;`, function (err, results) {
+            if (err) throw (err);
+            inquirer.prompt([
+                {
+                    name: "selectEmployee",
+                    message: "Which employee's manager are you updating?",
+                    type: "list",
+                    choices: results,
+                },
+            ])
+            .then(answer => {
+                let answerBank = answer;
+                const getMngrList2 = () => {
+                    db.query(`SELECT id AS value, CONCAT(first_name, " ", last_name) AS name FROM employee;`, function (err, results) {
+                        if (err) throw (err);
+                        results.push({ value: 0, name: "null" });
+                        inquirer.prompt([
+                            {
+                                name: "mngrID",
+                                message: "Select the new manager that this employee will work under:",
+                                type: "list",
+                                default: "null",
+                                choices: results
+                            }
+                        ])
+                        .then(answer => {
+                            db.query(`UPDATE employee SET manager_id = "${answer.mngrID}" WHERE id = "${answerBank.selectEmployee}"`, function (err) {
+                                if (err) throw (err);
+                                console.log("Successfully updated manager");
+                            });
+                            menu();        
+                        });
+                    });
+                };
+                getMngrList2();
+            });
+        });
+    };
+    getEmpList2();
+};
 
 // function viewEmpByMngr() {
 // 
