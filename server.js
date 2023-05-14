@@ -31,6 +31,8 @@ const mainMenu = [
             "Add A Role",
             "Add An Employee",
             "Update An Employee Role",
+
+            // THE FOLLWOING WILL BE IMPLEMENTED IN FUTURE UPDATES
             // "Update Employee Managers",
             // "View Employees (By Manager)",
             // "View Employees (By Department)",
@@ -39,9 +41,10 @@ const mainMenu = [
             // "Delete Employees",
             // "View Total Budget",
             // "View Budget (By Department)",
+
             "Quit"
         ],
-        default: "Update An Employee Role",
+        default: "View All Departments",
     },
 ];
 
@@ -74,7 +77,7 @@ const menu = () => {
                 updateEmpRole();    
                 break;
 
-            // OPTIONAL BONUS POINTS!
+            // OPTIONAL BONUS POINTS FOR FUTURE UPDATES!
             // case "Update Employee Managers":
             //     updateEmpMngr();
             //     break;
