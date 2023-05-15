@@ -367,7 +367,6 @@ function deleteDepartment() {
                 },
             ])
             .then(answer => {
-                console.log(answer);
                 db.query(`DELETE FROM department WHERE id = "${answer.deleteDept}" `, function (err) {
                     if (err) throw (err);
                     console.log("Successfully removed department");
@@ -379,13 +378,53 @@ function deleteDepartment() {
     getDeptList2();
 };
 
-// function deleteRole() {
-// 
-// };
+function deleteRole() {
+    const getRoleList3 = () => {
+        db.query(`SELECT id AS value, title AS name FROM role;`, function (err, results) {
+            if (err) throw (err);
+            inquirer.prompt([
+                {
+                    name: "deleteRole",
+                    message: "Which role are you removing?",
+                    type: "list",
+                    choices: results,
+                },
+            ])
+            .then(answer => {
+                db.query(`DELETE FROM role WHERE id = "${answer.deleteRole}" `, function (err) {
+                    if (err) throw (err);
+                    console.log("Successfully removed role");
+                });
+                menu(); 
+            });
+        });
+    };
+    getRoleList3();
+};
 
-// function deleteEmployee() {
-// 
-// };
+function deleteEmployee() {
+    const getEmpList3 = () => {
+        db.query(`SELECT id AS value, CONCAT(first_name, " ", last_name) AS name FROM employee;`, function (err, results) {
+            if (err) throw (err);
+            inquirer.prompt([
+                {
+                    name: "deleteEmp",
+                    message: "Which employee are you removing?",
+                    type: "list",
+                    choices: results,
+                },
+            ])
+            .then(answer => {
+                db.query(`DELETE FROM employee WHERE id = "${answer.deleteEmp}" `, function (err) {
+                    if (err) throw (err);
+                    console.log("Successfully removed employee");
+                });
+                menu(); 
+            });
+        });
+    };
+    getEmpList3();
+};
 
 // function viewTotalBudget() {
 // 
