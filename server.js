@@ -31,17 +31,14 @@ const mainMenu = [
             "Add A Role",
             "Add An Employee",
             "Update An Employee Role",
-
-            // THE FOLLWOING WILL BE IMPLEMENTED IN FUTURE UPDATES
             "Update Employee Manager",
-            // "View Employees (By Manager)",
-            // "View Employees (By Department)",
+            // "View Employees (By Manager)",  ----->  FUTURE UPDATE
+            // "View Employees (By Department)",  ----->  FUTURE UPDATE
             "Delete Departments",
             "Delete Roles",
             "Delete Employees",
-            // "View Total Budget",
-            // "View Budget (By Department)",
-
+            "View Total Budget",
+            // "View Budget (By Department)",  ----->  FUTURE UPDATE
             "Quit"
         ],
         default: "View All Departments",
@@ -76,15 +73,13 @@ const menu = () => {
             case "Update An Employee Role":
                 updateEmpRole();    
                 break;
-
-            // OPTIONAL BONUS POINTS FOR FUTURE UPDATES!
             case "Update Employee Manager":
                 updateEmpMngr();
                 break;
-            // case "View Employees (By Manager)":
+            // case "View Employees (By Manager)":  ----->  FUTURE UPDATE
             //     viewEmpByMngr();
             //     break;
-            // case "View Employees (By Department)":
+            // case "View Employees (By Department)":  ----->  FUTURE UPDATE
             //     viewEmpByDpt();
             //     break;
             case "Delete Departments":
@@ -96,13 +91,12 @@ const menu = () => {
             case "Delete Employees":
                 deleteEmployee();
                 break;
-            // case "View Total Budget":
-            //     viewTotalBudget();
-            //     break;
-            // case "View Budget (By Department)":
+            case "View Total Budget":
+                viewTotalBudget();
+                break;
+            // case "View Budget (By Department)":  ----->  FUTURE UPDATE
             //     viewBudgetByDept();
             //     break;
-
             case "Quit":
                 console.log("Goodbye!");
                 db.end();
@@ -426,10 +420,15 @@ function deleteEmployee() {
     getEmpList3();
 };
 
-// function viewTotalBudget() {
-// 
-// };
+function viewTotalBudget() {
+    db.query(`SELECT SUM(R.salary) AS "total budget" FROM employee E LEFT JOIN employee M ON E.manager_id = M.id LEFT JOIN role R ON E.role_id = R.id LEFT JOIN department D ON R.department_id = D.id;`, function (err, results) {
+        if (err) throw (err);
+        console.table(results);
+        menu();
+    });
+};
 
+// TODO:
 // function viewBudgetByDept() {
-// 
+
 // };
